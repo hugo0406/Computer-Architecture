@@ -14,9 +14,6 @@ main:
     li   a7,4
     ecall
     
-    la   a0,test1
-    li   a1,0
-    ecall
         
     mv   a0,t0
     li   a7,1
