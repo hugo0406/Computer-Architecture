@@ -1,7 +1,7 @@
 .data 
     test1:    .dword 0x1122334455007700
-    str1:     .string "The Leftmost 0-byte of"
-    str2:     .string " is " 
+    str1:     .string "The Leftmost 0-byte is "
+
 .text
 main:
     la   t0,test1             #a1a0 =test1
@@ -15,13 +15,9 @@ main:
     ecall
     
     la   a0,test1
-    li   a7,3
+    li   a1,0
     ecall
-    
-    la   a0,str2
-    li   a7,4
-    ecall
-    
+        
     mv   a0,t0
     li   a7,1
     ecall
@@ -181,10 +177,3 @@ clz:
     li    t1,64
     sub   a0,t1,a0
     jr    ra
-
-
-
-
-
-
-    
