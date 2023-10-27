@@ -1,31 +1,35 @@
 #include <stdint.h>
 #include <stdio.h>
-extern uint64_t get_cycles();
-extern void encrypt(uint64_t *data, uint64_t key);
-extern void decrypt(uint64_t *data, uint64_t key);
 
+extern uint64_t get_cycles();
+extern uint64_t get_instret();
+extern int find_string(uint64_t x, int n);
 
 int main()
 {
-    uint64_t key = 0x0123456789ABCDEF; // Encryption key
-    uint64_t test_data = 0x0000000010101010; // Test data in binary
+    int  result[3];
+    uint64_t test_data[] = {0x0f00000000000000, 
+                            0x0000000000000000, 
+                            0x0123456789abcdef};	
 
+    uint64_t instret = get_instret();
+    uint64_t start = get_cycles();             
 
-    printf("Original Data:\n");
-    printf("Data: 0x%016lx\n", test_data);
+    for (int i = 0; i < 3; i++) {
+        uint64_t x = test_data[i];
+        int n = 4; 
+        result[i] = find_string(x, n);
+    }
 
-    int32_t start = get_cycles();
+    uint64_t fin = get_instret();
+    uint64_t end = get_cycles();
 
-    /* Encrypt and print encrypted data */
-    printf("\nEncrypted Data:\n");
-    encrypt(&test_data, key);
-    printf("Data: 0x%016lx\n", test_data);
+    uint64_t cyclecount = end - start;
+    uint64_t instrcount = fin - instret;
 
-    /* Decrypt and print decrypted data */
-    printf("\nDecrypted Data:\n");
-    decrypt(&test_data, key);
-    printf("Data: 0x%016lx\n", test_data);
-    int32_t end = get_cycles();
+    for (int i = 0; i < 3; i++) { printf("Test Case %d: Input: 0x%016llx, Result: %d\n", i+1, test_data[i], result[i]);}
     
+    printf("cycle count: %u\n", (unsigned int) cyclecount);
+    printf("instruction count: %u\n", (unsigned) (instrcount));
     return 0;
 }
