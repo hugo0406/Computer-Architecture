@@ -18,21 +18,25 @@ uint16_t count_leading_zeros(uint64_t x)
     x += (x >> 8);
     x += (x >> 16);
     x += (x >> 32);
-
     return (64 - (x & 0x7f));
 }
 
-/* Simple XOR-based encryption function with leading zero count */
-void encrypt(uint64_t *data, uint64_t key)
-{
-    uint16_t leading_zeros = count_leading_zeros(key);
-    *data ^= (key << leading_zeros);
-}
 
-/* Simple XOR-based decryption function with leading zero count */
-void decrypt(uint64_t *data, uint64_t key)
-{
-    uint16_t leading_zeros = count_leading_zeros(key);
-    *data ^= (key << leading_zeros);
-}
+int find_string(uint64_t x, int n){  
 
+    int clz;    // numbers of consecutive leading bits (0 or 1)
+    int pos = 0;    // position of fist '1' bit in consecutive '1' bit string from significant bit
+
+    while(x != 0){
+        clz = count_leading_zeros(x);
+        x = x << clz;
+        pos = pos + clz;
+        clz = count_leading_zeros(~x);
+
+        if (clz >= n)
+            return pos;
+        x = x << clz;
+        pos = pos + clz;
+    }
+    return -1;
+}
