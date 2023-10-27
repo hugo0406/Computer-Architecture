@@ -2,14 +2,17 @@
 
 include ../../mk/toolchain.mk
 
-CFLAGS = -march=rv32i_zicsr_zifencei -mabi=ilp32 -O0 -Wall
+CFLAGS = -march=rv32i_zicsr_zifencei -mabi=ilp32 -Ofast -Wall 
 
 OBJS = \
     getcycles.o \
-    main.o
+    getinstret.o \
+    main.o\
+    func.o
+
 BIN = main.elf
 
-%.o: %.S
+%.o: %.s
 	$(CROSS_COMPILE)gcc $(CFLAGS) -c -o $@ $<
 
 %.o: %.c
